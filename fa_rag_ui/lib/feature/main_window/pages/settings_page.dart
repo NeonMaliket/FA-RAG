@@ -1,3 +1,4 @@
+import 'package:fa_rag_ui/domain/domain.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/abstract_page.dart';
 import 'package:flutter/material.dart';
 
@@ -13,42 +14,45 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-class ThemeSwitcher extends StatefulWidget {
+class ThemeSwitcher extends StatelessWidget {
   const ThemeSwitcher({super.key});
 
   @override
-  State<ThemeSwitcher> createState() => _ThemeSwitcherState();
-}
-
-class _ThemeSwitcherState extends State<ThemeSwitcher> {
-  ThemeMode themeMode = ThemeMode.system;
-  final themeMap = {0: ThemeMode.dark, 1: ThemeMode.system, 2: ThemeMode.light};
-
-  @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(Icons.color_lens),
-      title: Text('Theme Mode'),
-      trailing: ToggleButtons(
-        isSelected: [_isDarkTheme, _isSystemTheme, _isLishtTheme],
-        onPressed: (index) {
-          themeMode = themeMap[index] ?? themeMode;
-          setState(() {});
-        },
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        children: [
-          Text('Dark'),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Text('System'),
+    final settings = ApplicationSettingsProvider.of(context);
+    return ListenableBuilder(
+      listenable: settings,
+      builder: (context, _) {
+        return ListTile(
+          leading: Icon(Icons.color_lens),
+          title: Text('Theme Mode'),
+          trailing: ToggleButtons(
+            isSelected: [
+              settings.isDarkThemeMode,
+              settings.isSystemThemeMode,
+              settings.isLightThemeMode,
+            ],
+            onPressed: (index) {
+              settings.turnTo(_themeMap[index] ?? ThemeMode.system);
+            },
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            children: [
+              Text('Dark'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Text('System'),
+              ),
+              Text('Light'),
+            ],
           ),
-          Text('Light'),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  bool get _isDarkTheme => themeMode == ThemeMode.dark;
-  bool get _isSystemTheme => themeMode == ThemeMode.system;
-  bool get _isLishtTheme => themeMode == ThemeMode.light;
+  Map<int, ThemeMode> get _themeMap => {
+    0: ThemeMode.dark,
+    1: ThemeMode.system,
+    2: ThemeMode.light,
+  };
 }
