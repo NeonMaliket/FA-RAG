@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     ApplicationSettingsProvider(
-      notifier: ApplicationSettings(),
+      applicationSettings: ApplicationSettings(),
       child: const FaRagApp(),
     ),
   );

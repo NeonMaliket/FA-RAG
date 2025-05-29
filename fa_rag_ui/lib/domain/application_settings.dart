@@ -19,9 +19,11 @@ class ApplicationSettingsProvider
     extends InheritedNotifier<ApplicationSettings> {
   const ApplicationSettingsProvider({
     super.key,
-    required super.notifier,
+    required this.applicationSettings,
     required super.child,
-  });
+  }) : super(notifier: applicationSettings);
+
+  final ApplicationSettings applicationSettings;
 
   static ApplicationSettings of(BuildContext context) {
     final provider = context
