@@ -17,7 +17,10 @@ class AbstractPage extends StatelessWidget {
           padding: const EdgeInsets.all(50.0),
           child: Text(title, style: context.theme().textTheme.headlineLarge),
         ),
-        child,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50.0),
+          child: child,
+        ),
       ],
     );
   }

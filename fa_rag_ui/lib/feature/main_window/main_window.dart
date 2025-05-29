@@ -1,5 +1,6 @@
 import 'package:fa_rag_ui/feature/main_window/model/model.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/pages.dart';
+import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';
 
 final menuMap = [
@@ -22,9 +23,9 @@ class MainWindow extends StatelessWidget {
       key: scaffoldKey,
       appBar: AppBar(
         title: Text('FA RAG'),
-        leading: FloatingActionButton.small(
-          child: Icon(Icons.menu),
-          onPressed: () => scaffoldKey.currentState?.openDrawer(),
+        leading: InkWell(
+          child: Icon(Icons.menu, color: context.theme().primaryColor),
+          onTap: () => scaffoldKey.currentState?.openDrawer(),
         ),
       ),
       drawer: MainWindowDrawer(pageModel: pageModel),
@@ -54,7 +55,9 @@ class _MainWindowBodyState extends State<MainWindowBody> {
       3: Text('Page: 3'),
       4: SettingsPage(),
     };
-    _pageController = PageController(initialPage: 4);
+    _pageController = PageController(
+      initialPage: widget.pageModel.currentIndex,
+    );
     widget.pageModel.addListener(() {
       _pageController.jumpToPage(widget.pageModel.currentIndex);
       setState(() {});
@@ -95,7 +98,10 @@ class MainWindowDrawer extends StatelessWidget {
                   pageModel.pageTo(item['index'] as int);
                 },
                 child: ListTile(
-                  leading: Icon((item['icon'] as IconData)),
+                  leading: Icon(
+                    (item['icon'] as IconData),
+                    color: context.theme().primaryColor,
+                  ),
                   title: Text(item['title'] as String),
                 ),
               ),

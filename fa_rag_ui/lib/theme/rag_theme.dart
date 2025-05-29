@@ -4,9 +4,9 @@ final ThemeData ragAppDarkTheme = ThemeData(
   brightness: Brightness.dark,
   useMaterial3: true,
   scaffoldBackgroundColor: const Color(0xFF121212),
-  primaryColor: const Color(0xFF00BFA5), // Бирюзовый акцент
+  primaryColor: const Color(0xFF2E7D32), // Бирюзовый акцент
   colorScheme: const ColorScheme.dark(
-    primary: Color(0xFF00BFA5),
+    primary: Color(0xFF2E7D32),
     secondary: Color(0xFFFF9100), // Оранжевый акцент
     surface: Color(0xFF1E1E1E),
     onPrimary: Colors.black,
@@ -65,7 +65,7 @@ final ThemeData ragAppDarkTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: Colors.black,
-      backgroundColor: Color(0xFF00BFA5),
+      backgroundColor: Color(0xFF2E7D32),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       textStyle: const TextStyle(fontWeight: FontWeight.w600),
@@ -82,9 +82,9 @@ final ThemeData ragAppDarkTheme = ThemeData(
     ),
   ),
   sliderTheme: const SliderThemeData(
-    activeTrackColor: Color(0xFF00BFA5),
+    activeTrackColor: Color(0xFF2E7D32),
     inactiveTrackColor: Colors.white24,
-    thumbColor: Color(0xFF00BFA5),
+    thumbColor: Color(0xFF2E7D32),
     overlayColor: Color(0x4000BFA5),
   ),
   dialogTheme: DialogThemeData(backgroundColor: const Color(0xFF1E1E1E)),
@@ -94,9 +94,9 @@ final ThemeData ragAppLightTheme = ThemeData(
   brightness: Brightness.light,
   useMaterial3: true,
   scaffoldBackgroundColor: const Color(0xFFF5F7FA),
-  primaryColor: const Color(0xFF00BFA5), // Бирюзовый акцент
+  primaryColor: const Color(0xFF2E7D32), // Бирюзовый акцент
   colorScheme: const ColorScheme.light(
-    primary: Color(0xFF00BFA5),
+    primary: Color(0xFF2E7D32),
     secondary: Color(0xFFFF9100), // Оранжевый акцент
     surface: Color(0xFFFFFFFF),
     onPrimary: Colors.white,
@@ -155,7 +155,7 @@ final ThemeData ragAppLightTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: Colors.white,
-      backgroundColor: Color(0xFF00BFA5),
+      backgroundColor: Color(0xFF2E7D32),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       textStyle: const TextStyle(fontWeight: FontWeight.w600),
@@ -172,9 +172,9 @@ final ThemeData ragAppLightTheme = ThemeData(
     ),
   ),
   sliderTheme: const SliderThemeData(
-    activeTrackColor: Color(0xFF00BFA5),
+    activeTrackColor: Color(0xFF2E7D32),
     inactiveTrackColor: Colors.black26,
-    thumbColor: Color(0xFF00BFA5),
+    thumbColor: Color(0xFF2E7D32),
     overlayColor: Color(0x4000BFA5),
   ),
   dialogTheme: DialogThemeData(backgroundColor: const Color(0xFFFFFFFF)),
