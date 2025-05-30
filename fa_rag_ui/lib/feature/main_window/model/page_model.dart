@@ -10,3 +10,24 @@ class PageModel extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+class MainPageProvider extends InheritedNotifier<PageModel> {
+  const MainPageProvider({
+    super.key,
+    required this.pageModel,
+    required super.child,
+  }) : super(notifier: pageModel);
+
+  final PageModel pageModel;
+
+  static PageModel of(BuildContext context) {
+    final provider = context
+        .dependOnInheritedWidgetOfExactType<MainPageProvider>();
+
+    if (provider == null) {
+      throw Exception("MainPageProvider has not been regestered!");
+    }
+
+    return provider.pageModel;
+  }
+}

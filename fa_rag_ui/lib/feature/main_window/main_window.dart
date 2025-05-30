@@ -19,24 +19,26 @@ class MainWindow extends StatelessWidget {
     final scaffoldKey = GlobalKey<ScaffoldState>();
     final pageModel = PageModel();
 
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        title: Text('FA RAG'),
-        leading: InkWell(
-          child: Icon(Icons.menu, color: context.theme().primaryColor),
-          onTap: () => scaffoldKey.currentState?.openDrawer(),
+    return MainPageProvider(
+      pageModel: pageModel,
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: AppBar(
+          title: Text('FA RAG'),
+          leading: InkWell(
+            child: Icon(Icons.menu, color: context.theme().primaryColor),
+            onTap: () => scaffoldKey.currentState?.openDrawer(),
+          ),
         ),
+        drawer: MainWindowDrawer(),
+        body: MainWindowBody(),
       ),
-      drawer: MainWindowDrawer(pageModel: pageModel),
-      body: MainWindowBody(pageModel: pageModel),
     );
   }
 }
 
 class MainWindowBody extends StatefulWidget {
-  const MainWindowBody({super.key, required this.pageModel});
-  final PageModel pageModel;
+  const MainWindowBody({super.key});
 
   @override
   State<MainWindowBody> createState() => _MainWindowBodyState();
@@ -45,9 +47,11 @@ class MainWindowBody extends StatefulWidget {
 class _MainWindowBodyState extends State<MainWindowBody> {
   late final PageController _pageController;
   late final Map<int, Widget> _pages;
+  bool _initialized = false;
 
   @override
   void initState() {
+    super.initState();
     _pages = {
       0: Text('Page: 0'),
       1: Text('Page: 1'),
@@ -55,14 +59,21 @@ class _MainWindowBodyState extends State<MainWindowBody> {
       3: Text('Page: 3'),
       4: SettingsPage(),
     };
-    _pageController = PageController(
-      initialPage: widget.pageModel.currentIndex,
-    );
-    widget.pageModel.addListener(() {
-      _pageController.jumpToPage(widget.pageModel.currentIndex);
-      setState(() {});
-    });
-    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_initialized) {
+      final pageModel = MainPageProvider.of(context);
+
+      _pageController = PageController(initialPage: pageModel.currentIndex);
+      pageModel.addListener(() {
+        _pageController.jumpToPage(pageModel.currentIndex);
+        setState(() {});
+      });
+      _initialized = true;
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -83,11 +94,11 @@ class _MainWindowBodyState extends State<MainWindowBody> {
 }
 
 class MainWindowDrawer extends StatelessWidget {
-  const MainWindowDrawer({super.key, required this.pageModel});
-  final PageModel pageModel;
+  const MainWindowDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final pageModel = MainPageProvider.of(context);
     return Drawer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +111,9 @@ class MainWindowDrawer extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(
                     (item['icon'] as IconData),
-                    color: context.theme().primaryColor,
+                    color: item['index'] == pageModel.currentIndex
+                        ? context.theme().colorScheme.secondary
+                        : context.theme().primaryColor,
                   ),
                   title: Text(item['title'] as String),
                 ),
