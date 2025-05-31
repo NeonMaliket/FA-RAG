@@ -1,6 +1,7 @@
 import 'package:fa_rag_ui/components/components.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/abstract_page.dart';
 import 'package:fa_rag_ui/test_utils/constatns.dart';
+import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 
@@ -18,7 +19,7 @@ class QueryPage extends StatelessWidget {
           icon: Icon(Icons.model_training),
           onChanged: (index) {},
         ),
-        SizedBox(height: 25),
+        SizedBox(height: 5),
         MiniSelect(
           items: ['GPT-3.55555555555555555555', 'GPT-4o', 'GPT-4'],
           lable: 'Model',
@@ -30,37 +31,54 @@ class QueryPage extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar.medium(
-            collapsedHeight: 75,
+            collapsedHeight: 100,
             surfaceTintColor: Colors.transparent,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             scrolledUnderElevation: 100,
-            expandedHeight: 75.0,
+            expandedHeight: 175.0,
             flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.pin,
               expandedTitleScale: 1,
-              title: Row(
-                spacing: 10,
-                children: [
-                  Expanded(
-                    flex: 9,
-                    child: Form(
-                      child: TextField(
-                        decoration: InputDecoration(labelText: 'User Message'),
+              title: Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(
+                      flex: 9,
+                      child: Form(
+                        child: TextField(
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            labelText: 'User Message',
+                            alignLabelWithHint: true,
+                            suffixIcon: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsGeometry.symmetric(
+                                    horizontal: 10,
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.send,
+                                      size: 21,
+                                      color: context
+                                          .theme()
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(56, 56),
-                      ),
-                      onPressed: () {},
-                      child: Icon(Icons.send, size: 21),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -71,7 +89,7 @@ class QueryPage extends StatelessWidget {
                 future: markdown(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: const CircularProgressIndicator());
+                    return Center(child: const LinearProgressIndicator());
                   }
 
                   if (snapshot.hasError) {
@@ -82,7 +100,13 @@ class QueryPage extends StatelessWidget {
                     return const Text('No data');
                   }
 
-                  return GptMarkdown(snapshot.data!, textAlign: TextAlign.left);
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 50),
+                    child: GptMarkdown(
+                      snapshot.data!,
+                      textAlign: TextAlign.left,
+                    ),
+                  );
                 },
               );
             },

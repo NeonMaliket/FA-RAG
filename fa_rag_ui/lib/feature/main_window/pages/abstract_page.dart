@@ -22,7 +22,7 @@ class AbstractPage extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Padding(
-            padding: const EdgeInsets.all(50.0),
+            padding: const EdgeInsets.all(50.0).copyWith(bottom: 0),
             child: Row(
               children: [
                 Expanded(
