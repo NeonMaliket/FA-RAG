@@ -56,13 +56,14 @@ class _MainWindowBodyState extends State<MainWindowBody> {
       0: Text('Page: 0'),
       1: Text('Page: 1'),
       2: Text('Page: 2'),
-      3: Text('Page: 3'),
+      3: QueryPage(),
       4: SettingsPage(),
     };
   }
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     if (!_initialized) {
       final pageModel = MainPageProvider.of(context);
 
@@ -73,7 +74,6 @@ class _MainWindowBodyState extends State<MainWindowBody> {
       });
       _initialized = true;
     }
-    super.didChangeDependencies();
   }
 
   @override

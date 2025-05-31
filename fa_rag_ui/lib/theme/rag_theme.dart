@@ -4,10 +4,10 @@ final ThemeData ragAppDarkTheme = ThemeData(
   brightness: Brightness.dark,
   useMaterial3: true,
   scaffoldBackgroundColor: const Color(0xFF121212),
-  primaryColor: const Color(0xFF2E7D32), // Бирюзовый акцент
+  primaryColor: const Color(0xFF2E7D32),
   colorScheme: const ColorScheme.dark(
     primary: Color(0xFF2E7D32),
-    secondary: Color(0xFFFF9100), // Оранжевый акцент
+    secondary: Color(0xFFFF9100),
     surface: Color(0xFF1E1E1E),
     onPrimary: Colors.black,
     onSecondary: Colors.black,
@@ -61,6 +61,11 @@ final ThemeData ragAppDarkTheme = ThemeData(
     ),
     contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
     hintStyle: TextStyle(color: Colors.white38),
+    floatingLabelStyle: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 20,
+      color: Color(0xFFFF9100),
+    ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -94,10 +99,10 @@ final ThemeData ragAppLightTheme = ThemeData(
   brightness: Brightness.light,
   useMaterial3: true,
   scaffoldBackgroundColor: const Color(0xFFF5F7FA),
-  primaryColor: const Color(0xFF2E7D32), // Бирюзовый акцент
+  primaryColor: const Color(0xFF2E7D32),
   colorScheme: const ColorScheme.light(
     primary: Color(0xFF2E7D32),
-    secondary: Color(0xFFFF9100), // Оранжевый акцент
+    secondary: Color(0xFFFF9100),
     surface: Color(0xFFFFFFFF),
     onPrimary: Colors.white,
     onSecondary: Colors.white,
@@ -151,6 +156,11 @@ final ThemeData ragAppLightTheme = ThemeData(
     ),
     contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
     hintStyle: TextStyle(color: Colors.black38),
+    floatingLabelStyle: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 20,
+      color: Color(0xFFFF9100),
+    ),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

@@ -10,8 +10,10 @@ class ApplicationSettings extends ChangeNotifier {
   bool get isLightThemeMode => _currentThemeMode == ThemeMode.light;
 
   void turnTo(themeMode) {
-    _currentThemeMode = themeMode;
-    notifyListeners();
+    if (_currentThemeMode != themeMode) {
+      _currentThemeMode = themeMode;
+      notifyListeners();
+    }
   }
 }
 
