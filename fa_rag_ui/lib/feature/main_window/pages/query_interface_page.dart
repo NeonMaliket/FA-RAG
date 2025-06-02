@@ -1,4 +1,5 @@
-import 'package:fa_rag_ui/components/components.dart';
+import 'package:fa_rag_ui/components/ai/chat_snapshot_select.dart';
+import 'package:fa_rag_ui/core/domain/chat_snapshot.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/abstract_page.dart';
 import 'package:fa_rag_ui/test_utils/constatns.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';
@@ -13,18 +14,10 @@ class QueryPage extends StatelessWidget {
     return AbstractPage(
       title: 'Query Interface',
       actions: [
-        MiniSelect(
-          items: ['Ollama', 'OpenAI', 'Image Service'],
-          lable: 'Chat Interface',
-          icon: Icon(Icons.model_training),
-          onChanged: (index) {},
-        ),
-        SizedBox(height: 5),
-        MiniSelect(
-          items: ['GPT-3.55555555555555555555', 'GPT-4o', 'GPT-4'],
-          lable: 'Model',
-          icon: Icon(Icons.rocket),
-          onChanged: (index) {},
+        ChatSnapshotSelect(
+          onSnapshotSelected: (ChatSnapshot? snap) {
+            print("From query: ${snap?.title}");
+          },
         ),
       ],
       child: CustomScrollView(

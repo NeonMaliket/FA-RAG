@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   gpt_markdown: ^1.0.19
   window_size: ^0.1.0
+  dio: ^5.8.0+1
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:

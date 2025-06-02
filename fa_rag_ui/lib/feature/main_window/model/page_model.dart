@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class PageModel extends ChangeNotifier {
-  int _currentIndex = 3;
+  int _currentIndex = 1;
 
   get currentIndex => _currentIndex;
 

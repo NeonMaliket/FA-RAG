@@ -35,7 +35,7 @@ class _MiniSelectState extends State<MiniSelect> {
   @override
   Widget build(BuildContext context) {
     final select = Tooltip(
-      message: widget.items[selectedIndex],
+      message: widget.items.isEmpty ? "" : widget.items[selectedIndex],
       child: DropdownButtonHideUnderline(
         child: DropdownButton<int>(
           focusColor: Colors.transparent,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 final menuMap = [
   {'index': 0, 'title': 'Vector Database Selection', 'icon': Icons.data_array},
-  {'index': 1, 'title': 'Model Selection', 'icon': Icons.model_training},
+  {'index': 1, 'title': 'Model Configuration', 'icon': Icons.model_training},
   {'index': 2, 'title': 'Data Upload & Vectorization', 'icon': Icons.upload},
   {'index': 3, 'title': 'Query Interface', 'icon': Icons.interests},
   {'index': 4, 'title': 'System Settings', 'icon': Icons.settings},
@@ -54,7 +54,7 @@ class _MainWindowBodyState extends State<MainWindowBody> {
     super.initState();
     _pages = {
       0: Text('Page: 0'),
-      1: Text('Page: 1'),
+      1: ModelConfiguration(),
       2: Text('Page: 2'),
       3: QueryPage(),
       4: SettingsPage(),

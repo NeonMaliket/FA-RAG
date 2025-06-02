@@ -71,7 +71,7 @@ final ThemeData ragAppDarkTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: Colors.black,
       backgroundColor: Color(0xFF2E7D32),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       textStyle: const TextStyle(fontWeight: FontWeight.w600),
     ),
@@ -166,7 +166,7 @@ final ThemeData ragAppLightTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: Colors.white,
       backgroundColor: Color(0xFF2E7D32),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       textStyle: const TextStyle(fontWeight: FontWeight.w600),
     ),
