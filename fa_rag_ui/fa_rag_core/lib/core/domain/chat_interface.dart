@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:fa_rag_ui/config/dio_config.dart';
-import 'package:fa_rag_ui/config/logger_config.dart';
-import 'package:fa_rag_ui/core/domain/chat_model.dart';
+import 'package:fa_rag_core/core/config/dio_config.dart';
+import 'package:fa_rag_core/core/config/logger_config.dart';
+import 'package:fa_rag_core/core/core.dart';
 
 enum ChatInterfaceName {
   ollama

@@ -1,4 +1,4 @@
-import 'package:fa_rag_ui/core/domain/chat_interface.dart';
+import 'package:fa_rag_core/core/core.dart';
 import 'package:flutter/material.dart';
 
 class ChatInterfaceObserver extends ChangeNotifier {

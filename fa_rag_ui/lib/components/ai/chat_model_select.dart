@@ -1,6 +1,5 @@
+import 'package:fa_rag_core/core/core.dart';
 import 'package:fa_rag_ui/components/components.dart';
-import 'package:fa_rag_ui/core/domain/chat_interface.dart';
-import 'package:fa_rag_ui/core/domain/chat_model.dart';
 import 'package:flutter/material.dart';
 
 class ChatModelSelect extends StatefulWidget {

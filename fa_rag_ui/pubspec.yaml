@@ -38,6 +38,8 @@ dependencies:
   window_size: ^0.1.0
   dio: ^5.8.0+1
   logger: ^2.5.0
+  fa_rag_core:
+    path: ./fa_rag_core
 
 dev_dependencies:
   flutter_test:

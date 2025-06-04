@@ -1,4 +1,4 @@
-import 'package:fa_rag_ui/core/core.dart';
+import 'package:fa_rag_core/core/core.dart';
 import 'package:fa_rag_ui/feature/main_window/model/model.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/pages.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';

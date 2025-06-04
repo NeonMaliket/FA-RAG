@@ -1,8 +1,6 @@
+import 'package:fa_rag_core/core/core.dart';
 import 'package:fa_rag_ui/components/ai/chat_snapshot_select.dart';
 import 'package:fa_rag_ui/config/logger_config.dart';
-import 'package:fa_rag_ui/core/domain/chat_interface.dart';
-import 'package:fa_rag_ui/core/domain/chat_snapshot.dart';
-import 'package:fa_rag_ui/core/domain/chat_snapshot_pool.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/abstract_page.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';

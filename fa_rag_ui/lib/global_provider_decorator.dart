@@ -1,6 +1,4 @@
-import 'package:fa_rag_ui/core/core.dart';
-import 'package:fa_rag_ui/core/domain/chat_interface.dart';
-import 'package:fa_rag_ui/core/domain/chat_interface_observer.dart';
+import 'package:fa_rag_core/core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'domain/application_settings.dart';

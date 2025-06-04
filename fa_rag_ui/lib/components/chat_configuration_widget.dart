@@ -1,8 +1,6 @@
-import 'package:fa_rag_ui/core/domain/chat_interface_observer.dart';
-import 'package:fa_rag_ui/core/domain/chat_model.dart';
+import 'package:fa_rag_core/core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fa_rag_ui/core/domain/chat_interface.dart';
 import 'package:fa_rag_ui/components/ai/chat_interface_select.dart';
 import 'package:fa_rag_ui/components/ai/chat_model_select.dart';
 

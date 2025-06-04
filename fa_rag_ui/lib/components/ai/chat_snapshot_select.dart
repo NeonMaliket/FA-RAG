@@ -1,5 +1,5 @@
+import 'package:fa_rag_core/core/core.dart';
 import 'package:fa_rag_ui/components/mini_select.dart';
-import 'package:fa_rag_ui/core/core.dart';
 import 'package:flutter/material.dart';
 
 class ChatSnapshotSelect extends StatelessWidget {
