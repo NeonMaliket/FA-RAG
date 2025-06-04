@@ -1,13 +1,27 @@
 import 'package:fa_rag_ui/components/ai/chat_snapshot_select.dart';
+import 'package:fa_rag_ui/config/logger_config.dart';
 import 'package:fa_rag_ui/core/domain/chat_snapshot.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/abstract_page.dart';
-import 'package:fa_rag_ui/test_utils/constatns.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 
-class QueryPage extends StatelessWidget {
+class QueryPage extends StatefulWidget {
   const QueryPage({super.key});
+
+  @override
+  State<QueryPage> createState() => _QueryPageState();
+}
+
+class _QueryPageState extends State<QueryPage> {
+  ChatSnapshot? snapshot;
+  final textController = TextEditingController(text: "");
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +30,11 @@ class QueryPage extends StatelessWidget {
       actions: [
         ChatSnapshotSelect(
           onSnapshotSelected: (ChatSnapshot? snap) {
-            print("From query: ${snap?.title}");
+            logger.i("From query: ${snap?.title}");
+            if (snap != null) {
+              snapshot = snap;
+              setState(() {});
+            }
           },
         ),
       ],
@@ -41,6 +59,7 @@ class QueryPage extends StatelessWidget {
                       flex: 9,
                       child: Form(
                         child: TextField(
+                          controller: textController,
                           maxLines: 5,
                           decoration: InputDecoration(
                             labelText: 'User Message',
@@ -61,7 +80,15 @@ class QueryPage extends StatelessWidget {
                                           .colorScheme
                                           .secondary,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      logger.i("Snapshot: ${snapshot?.title}}");
+                                      if (snapshot != null) {
+                                        snapshot!.chatInterface.sendMessage(
+                                          textController.text,
+                                          snapshot!.chatModel,
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -78,8 +105,11 @@ class QueryPage extends StatelessWidget {
           SliverAnimatedList(
             initialItemCount: 1,
             itemBuilder: (context, index, animation) {
-              return FutureBuilder(
-                future: markdown(),
+              if (snapshot == null) {
+                return SizedBox.shrink();
+              }
+              return StreamBuilder(
+                stream: snapshot!.chatInterface.messages.stream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: const LinearProgressIndicator());
@@ -96,7 +126,7 @@ class QueryPage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 50),
                     child: GptMarkdown(
-                      snapshot.data!,
+                      String.fromCharCodes(snapshot.data!),
                       textAlign: TextAlign.left,
                     ),
                   );

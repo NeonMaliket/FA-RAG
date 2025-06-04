@@ -14,16 +14,4 @@ class ChatSnapshot extends ChangeNotifier {
     required this.chatInterface,
     required this.chatModel,
   });
-
-  ChatSnapshot copyWith({
-    String? title,
-    ChatInterface? chatInterface,
-    ChatModel? chatModel,
-  }) {
-    return ChatSnapshot(
-      title: title ?? this.title,
-      chatInterface: chatInterface ?? this.chatInterface,
-      chatModel: chatModel ?? this.chatModel,
-    );
-  }
 }

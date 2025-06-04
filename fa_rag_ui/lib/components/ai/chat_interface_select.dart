@@ -12,12 +12,14 @@ class ChatInterfaceSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     final chatInterfaces = ChatInterfaceObserverProvider.of(context);
     final Map<int, ChatInterface> services = chatInterfaces.all().asMap();
+
     return ListenableBuilder(
       builder: (context, _) {
+        final chatInterfaceNames = services.values
+            .map((chatInterface) => chatInterface.name.value)
+            .toList();
         return MiniSelect(
-          items: services.values
-              .map((chatInterface) => chatInterface.name.value)
-              .toList(),
+          items: chatInterfaceNames,
           lable: 'Chat Interface',
           icon: Icon(Icons.model_training),
           onChanged: (index) {

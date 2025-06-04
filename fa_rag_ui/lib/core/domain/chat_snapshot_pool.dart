@@ -2,23 +2,27 @@ import 'package:fa_rag_ui/core/core.dart';
 import 'package:flutter/material.dart';
 
 class ChatSnapshotPool extends ChangeNotifier {
-  final Map<String, ChatSnapshot> snapshotPool = {};
+  final Map<String, ChatSnapshot> _snapshotPool = {};
 
   void add(ChatSnapshot snapshot) {
-    snapshotPool[snapshot.title] = snapshot;
+    _snapshotPool[snapshot.title] = snapshot;
     notifyListeners();
   }
 
   List<ChatSnapshot> list() {
-    return snapshotPool.values.toList();
+    return _snapshotPool.values.toList();
   }
 
   ChatSnapshot? get(String title) {
-    return snapshotPool[title];
+    return _snapshotPool[title];
+  }
+
+  bool isEmpty() {
+    return _snapshotPool.isEmpty;
   }
 
   void delete(String title) {
-    snapshotPool.remove(title);
+    _snapshotPool.remove(title);
     notifyListeners();
   }
 }

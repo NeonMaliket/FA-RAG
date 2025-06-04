@@ -24,6 +24,9 @@ class ChatModelSelect extends StatelessWidget {
             final Map<int, ChatModel> chatModelMap = chatModels
                 .toList()
                 .asMap();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              onModelChaged(chatModelMap[0]);
+            });
             return MiniSelect(
               items: chatModels.map((model) => model.name).toList(),
               lable: 'Model',

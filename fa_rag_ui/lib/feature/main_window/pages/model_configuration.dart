@@ -48,8 +48,10 @@ class _ModelConfigurationState extends State<ModelConfiguration> {
             setState(() {});
           },
           onModelSelected: (ChatModel? selected) {
-            _chatModel = selected;
-            setState(() {});
+            if (mounted) {
+              _chatModel = selected;
+              setState(() {});
+            }
           },
         ),
       ],

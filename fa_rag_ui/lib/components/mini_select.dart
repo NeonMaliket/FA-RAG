@@ -7,7 +7,7 @@ class MiniSelect extends StatefulWidget {
   const MiniSelect({
     super.key,
     required this.items,
-    this.initialIndex = 0,
+    this.initialIndex,
     required this.onChanged,
     this.lable = "",
     this.icon,
@@ -15,7 +15,7 @@ class MiniSelect extends StatefulWidget {
 
   final Icon? icon;
   final String lable;
-  final int initialIndex;
+  final int? initialIndex;
   final List<String> items;
   final Function(int?) onChanged;
 
@@ -24,18 +24,25 @@ class MiniSelect extends StatefulWidget {
 }
 
 class _MiniSelectState extends State<MiniSelect> {
-  late int selectedIndex;
+  late int? selectedIndex;
 
   @override
   void initState() {
     super.initState();
     selectedIndex = widget.initialIndex;
+    if (widget.initialIndex == null && widget.items.isNotEmpty) {
+      selectedIndex = 0;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final select = Tooltip(
-      message: widget.items.isEmpty ? "" : widget.items[selectedIndex],
+      message: widget.items.isEmpty
+          ? ""
+          : (selectedIndex != null
+                ? widget.items[selectedIndex!]
+                : "Select..."),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<int>(
           focusColor: Colors.transparent,
@@ -56,7 +63,7 @@ class _MiniSelectState extends State<MiniSelect> {
               .toList(),
           onChanged: (index) {
             widget.onChanged(index);
-            selectedIndex = index ?? 0;
+            selectedIndex = index;
             setState(() {});
           },
         ),

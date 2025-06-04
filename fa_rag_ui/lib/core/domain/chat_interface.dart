@@ -1,3 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:fa_rag_ui/config/dio_config.dart';
 import 'package:fa_rag_ui/config/logger_config.dart';
 import 'package:fa_rag_ui/core/domain/chat_model.dart';
@@ -21,12 +26,18 @@ enum ChatInterfaceName {
 abstract class ChatInterface {
   final String url;
   final ChatInterfaceName name;
-  bool isInstalled = false;
+  final StreamController<Uint8List> messages = StreamController.broadcast();
 
   ChatInterface({required this.url, required this.name});
 
   Stream<int> installModel(ChatModel model);
   Future<Set<ChatModel>> availableModels();
+
+  void sendMessage(String message, ChatModel model);
+
+  Stream<String> messagesStream() {
+    return messages.stream.map((uint8List) => String.fromCharCodes(uint8List));
+  }
 }
 
 class OllamaChatInterface extends ChatInterface {
@@ -62,5 +73,39 @@ class OllamaChatInterface extends ChatInterface {
     return localModels
         .map((model) => OllamaChatModel(isInstalled: false, name: model))
         .toSet();
+  }
+
+  @override
+  void sendMessage(String message, ChatModel model) async {
+    final localUrl = "$url/chat";
+
+    try {
+      final body = {
+        "model": model.name,
+        "messages": [
+          {"role": "user", "content": message},
+        ],
+        "stream": true,
+      };
+
+      final response = await dio.post(
+        localUrl,
+        data: body,
+        options: Options(
+          responseType: ResponseType.stream,
+          headers: {
+            'Accept': 'text/event-stream',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      logger.i('Sent message: $body');
+
+      final stream = response.data.stream;
+      await messages.addStream(stream);
+    } catch (e) {
+      logger.w('ERROR: $e');
+    }
   }
 }

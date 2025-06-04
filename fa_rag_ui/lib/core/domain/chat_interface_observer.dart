@@ -11,10 +11,6 @@ class ChatInterfaceObserver extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<ChatInterface> allInstalled() {
-    return all().where((interface) => interface.isInstalled).toList();
-  }
-
   List<ChatInterface> all() {
     return _chatInterfaces.values.toList();
   }

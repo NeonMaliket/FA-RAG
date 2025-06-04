@@ -1,14 +1,62 @@
+import 'package:fa_rag_ui/core/core.dart';
 import 'package:fa_rag_ui/feature/main_window/model/model.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/pages.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';
 
-final menuMap = [
-  {'index': 0, 'title': 'Vector Database Selection', 'icon': Icons.data_array},
-  {'index': 1, 'title': 'Model Configuration', 'icon': Icons.model_training},
-  {'index': 2, 'title': 'Data Upload & Vectorization', 'icon': Icons.upload},
-  {'index': 3, 'title': 'Query Interface', 'icon': Icons.interests},
-  {'index': 4, 'title': 'System Settings', 'icon': Icons.settings},
+enum _MenuItemType {
+  vectorDatabaseSelection,
+  modelConfiguration,
+  dataUploadAndVectorization,
+  queryInterface,
+  systemSettings,
+}
+
+class _Menu {
+  final int index;
+  final String title;
+  final IconData icon;
+  final _MenuItemType type;
+
+  _Menu({
+    required this.index,
+    required this.title,
+    required this.icon,
+    required this.type,
+  });
+}
+
+final menuList = [
+  _Menu(
+    index: 0,
+    title: 'Vector Database Selection',
+    icon: Icons.data_array,
+    type: _MenuItemType.vectorDatabaseSelection,
+  ),
+  _Menu(
+    index: 1,
+    title: 'Model Configuration',
+    icon: Icons.model_training,
+    type: _MenuItemType.modelConfiguration,
+  ),
+  _Menu(
+    index: 2,
+    title: 'Data Upload & Vectorization',
+    icon: Icons.upload,
+    type: _MenuItemType.dataUploadAndVectorization,
+  ),
+  _Menu(
+    index: 3,
+    title: 'Query Interface',
+    icon: Icons.interests,
+    type: _MenuItemType.queryInterface,
+  ),
+  _Menu(
+    index: 4,
+    title: 'System Settings',
+    icon: Icons.settings,
+    type: _MenuItemType.systemSettings,
+  ),
 ];
 
 class MainWindow extends StatelessWidget {
@@ -99,28 +147,52 @@ class MainWindowDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageModel = MainPageProvider.of(context);
+    final snapshotPool = ChatSnapshotPoolProvider.of(context);
     return Drawer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: menuMap
+        children: menuList
             .map(
               (item) => InkWell(
-                onTap: () {
-                  pageModel.pageTo(item['index'] as int);
-                },
+                onTap:
+                    snapshotPool.isEmpty() &&
+                        item.type == _MenuItemType.queryInterface
+                    ? null
+                    : () {
+                        pageModel.pageTo(item.index);
+                      },
                 child: ListTile(
                   leading: Icon(
-                    (item['icon'] as IconData),
-                    color: item['index'] == pageModel.currentIndex
-                        ? context.theme().colorScheme.secondary
-                        : context.theme().primaryColor,
+                    item.icon,
+                    color: _menuItemColor(
+                      item,
+                      pageModel.currentIndex,
+                      context,
+                      snapshotPool,
+                    ),
                   ),
-                  title: Text(item['title'] as String),
+                  title: Text(item.title),
                 ),
               ),
             )
             .toList(),
       ),
     );
+  }
+
+  Color? _menuItemColor(
+    _Menu item,
+    int currentIndex,
+    BuildContext context,
+    ChatSnapshotPool snapshotPool,
+  ) {
+    if (item.index == currentIndex) {
+      return context.theme().colorScheme.secondary;
+    } else if (item.type == _MenuItemType.queryInterface) {
+      if (snapshotPool.isEmpty()) {
+        return context.theme().dividerColor;
+      }
+    }
+    return context.theme().primaryColor;
   }
 }

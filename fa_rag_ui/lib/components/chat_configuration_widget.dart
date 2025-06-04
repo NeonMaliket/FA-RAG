@@ -30,11 +30,15 @@ class _ChatConfigurationWidgetState extends State<ChatConfigurationWidget> {
     super.didChangeDependencies();
 
     if (!initialized) {
-      final serviceProvider = ChatInterfaceObserverProvider.of(context);
-      final services = serviceProvider.all();
-      chatInterface = services.isNotEmpty ? services.first : null;
-      setState(() {});
-      initialized = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          final serviceProvider = ChatInterfaceObserverProvider.of(context);
+          final services = serviceProvider.all();
+          chatInterface = services.isNotEmpty ? services.first : null;
+          initialized = true;
+          widget.onInterfaceSelected(chatInterface);
+        });
+      });
     }
   }
 
