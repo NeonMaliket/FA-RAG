@@ -1,6 +1,8 @@
 import 'package:fa_rag_ui/components/ai/chat_snapshot_select.dart';
 import 'package:fa_rag_ui/config/logger_config.dart';
+import 'package:fa_rag_ui/core/domain/chat_interface.dart';
 import 'package:fa_rag_ui/core/domain/chat_snapshot.dart';
+import 'package:fa_rag_ui/core/domain/chat_snapshot_pool.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/abstract_page.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,15 @@ class QueryPage extends StatefulWidget {
 class _QueryPageState extends State<QueryPage> {
   ChatSnapshot? snapshot;
   final textController = TextEditingController(text: "");
+  final modelResponse = StringBuffer("");
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final chatSnapshotPool = ChatSnapshotPoolProvider.of(context);
+    snapshot = chatSnapshotPool.list().first;
+  }
 
   @override
   void dispose() {
@@ -108,8 +119,8 @@ class _QueryPageState extends State<QueryPage> {
               if (snapshot == null) {
                 return SizedBox.shrink();
               }
-              return StreamBuilder(
-                stream: snapshot!.chatInterface.messages.stream,
+              return StreamBuilder<Message>(
+                stream: snapshot!.chatInterface.messagesStream(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: const LinearProgressIndicator());
@@ -122,11 +133,11 @@ class _QueryPageState extends State<QueryPage> {
                   if (!snapshot.hasData) {
                     return const Text('No data');
                   }
-
+                  modelResponse.write(snapshot.data?.chank ?? "");
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 50),
                     child: GptMarkdown(
-                      String.fromCharCodes(snapshot.data!),
+                      modelResponse.toString(),
                       textAlign: TextAlign.left,
                     ),
                   );

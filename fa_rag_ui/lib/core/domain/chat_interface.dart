@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -23,6 +24,21 @@ enum ChatInterfaceName {
   String get value => {ollama: 'Ollama'}[this] ?? 'Local';
 }
 
+class Message {
+  final String chank;
+  final bool done;
+
+  Message({required this.chank, required this.done});
+
+  factory Message.fromChunk(final String chunk) {
+    // {"model":"tinyllama:latest","created_at":"2025-06-04T14:56:12.798559Z","message":{"role":"assistant","content":"."},"done":false}
+    final decoded = jsonDecode(chunk);
+    final String message = decoded["message"]?["content"];
+    final bool done = decoded["done"];
+    return Message(chank: message, done: done);
+  }
+}
+
 abstract class ChatInterface {
   final String url;
   final ChatInterfaceName name;
@@ -35,8 +51,12 @@ abstract class ChatInterface {
 
   void sendMessage(String message, ChatModel model);
 
-  Stream<String> messagesStream() {
-    return messages.stream.map((uint8List) => String.fromCharCodes(uint8List));
+  Message modelChankParse(String chank);
+
+  Stream<Message> messagesStream() {
+    return messages.stream
+        .map((uint8List) => String.fromCharCodes(uint8List))
+        .map(modelChankParse);
   }
 }
 
@@ -107,5 +127,10 @@ class OllamaChatInterface extends ChatInterface {
     } catch (e) {
       logger.w('ERROR: $e');
     }
+  }
+
+  @override
+  Message modelChankParse(String chank) {
+    return Message.fromChunk(chank);
   }
 }

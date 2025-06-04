@@ -11,6 +11,7 @@ class MiniSelect extends StatefulWidget {
     required this.onChanged,
     this.lable = "",
     this.icon,
+    this.prefix,
   });
 
   final Icon? icon;
@@ -18,6 +19,8 @@ class MiniSelect extends StatefulWidget {
   final int? initialIndex;
   final List<String> items;
   final Function(int?) onChanged;
+
+  final Widget? prefix;
 
   @override
   State<MiniSelect> createState() => _MiniSelectState();
@@ -37,37 +40,45 @@ class _MiniSelectState extends State<MiniSelect> {
 
   @override
   Widget build(BuildContext context) {
-    final select = Tooltip(
-      message: widget.items.isEmpty
-          ? ""
-          : (selectedIndex != null
-                ? widget.items[selectedIndex!]
-                : "Select..."),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<int>(
-          focusColor: Colors.transparent,
-          value: selectedIndex,
-          isDense: true,
-          isExpanded: false,
-          menuMaxHeight: 200,
-          icon: widget.icon,
-          iconSize: 20,
-          iconEnabledColor: context.theme().colorScheme.secondary,
-          items: widget.items
-              .map(
-                (item) => DropdownMenuItem(
-                  value: widget.items.indexOf(item),
-                  child: Text(_decorateDropdownValue(item)),
-                ),
-              )
-              .toList(),
-          onChanged: (index) {
-            widget.onChanged(index);
-            selectedIndex = index;
-            setState(() {});
-          },
+    final select = Row(
+      spacing: 5,
+      children: [
+        widget.prefix ?? SizedBox.shrink(),
+        Expanded(
+          child: Tooltip(
+            message: widget.items.isEmpty
+                ? ""
+                : (selectedIndex != null
+                      ? widget.items[selectedIndex!]
+                      : "Select..."),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<int>(
+                focusColor: Colors.transparent,
+                value: selectedIndex,
+                isDense: true,
+                isExpanded: false,
+                menuMaxHeight: 200,
+                icon: widget.icon,
+                iconSize: 20,
+                iconEnabledColor: context.theme().colorScheme.secondary,
+                items: widget.items
+                    .map(
+                      (item) => DropdownMenuItem(
+                        value: widget.items.indexOf(item),
+                        child: Text(_decorateDropdownValue(item)),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (index) {
+                  widget.onChanged(index);
+                  selectedIndex = index;
+                  setState(() {});
+                },
+              ),
+            ),
+          ),
         ),
-      ),
+      ],
     );
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 250),
