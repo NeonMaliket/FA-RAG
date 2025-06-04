@@ -1,5 +1,4 @@
 import 'package:fa_rag_ui/components/components.dart';
-import 'package:fa_rag_ui/config/logger_config.dart';
 import 'package:fa_rag_ui/core/domain/chat_interface.dart';
 import 'package:fa_rag_ui/core/domain/chat_model.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,6 @@ class _ChatModelSelectState extends State<ChatModelSelect> {
               });
               _modelSet = true;
             }
-            logger.i("future");
             return MiniSelect(
               items: chatModels.map((model) => model.name).toList(),
               lable: 'Model',
