@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:fa_rag_ui/fa_rag_app.dart';
-import 'package:fa_rag_ui/global_provider_decorator.dart';
+import 'package:fa_rag_ui/provider_decorators.dart';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
 

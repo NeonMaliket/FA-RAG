@@ -5,6 +5,7 @@ import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';
 
 enum _MenuItemType {
+  prompts,
   vectorDatabaseSelection,
   modelConfiguration,
   dataUploadAndVectorization,
@@ -29,30 +30,36 @@ class _Menu {
 final menuList = [
   _Menu(
     index: 0,
+    title: 'Prompts',
+    icon: Icons.text_decrease,
+    type: _MenuItemType.prompts,
+  ),
+  _Menu(
+    index: 1,
     title: 'Vector Database Selection',
     icon: Icons.data_array,
     type: _MenuItemType.vectorDatabaseSelection,
   ),
   _Menu(
-    index: 1,
+    index: 2,
     title: 'Model Configuration',
     icon: Icons.model_training,
     type: _MenuItemType.modelConfiguration,
   ),
   _Menu(
-    index: 2,
+    index: 3,
     title: 'Data Upload & Vectorization',
     icon: Icons.upload,
     type: _MenuItemType.dataUploadAndVectorization,
   ),
   _Menu(
-    index: 3,
+    index: 4,
     title: 'Query Interface',
     icon: Icons.interests,
     type: _MenuItemType.queryInterface,
   ),
   _Menu(
-    index: 4,
+    index: 5,
     title: 'System Settings',
     icon: Icons.settings,
     type: _MenuItemType.systemSettings,
@@ -101,11 +108,12 @@ class _MainWindowBodyState extends State<MainWindowBody> {
   void initState() {
     super.initState();
     _pages = {
-      0: Text('Page: 0'),
-      1: ModelConfiguration(),
-      2: Text('Page: 2'),
-      3: QueryPage(),
-      4: SettingsPage(),
+      0: PromptsPage(),
+      1: Text('Page: 1'),
+      2: ModelConfiguration(),
+      3: Text('Page: 3'),
+      4: QueryPage(),
+      5: SettingsPage(),
     };
   }
 
