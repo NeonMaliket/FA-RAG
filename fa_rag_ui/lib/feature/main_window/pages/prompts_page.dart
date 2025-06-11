@@ -1,7 +1,9 @@
 import 'package:fa_rag_core/core/domain/prompts/prompt.dart';
 import 'package:fa_rag_ui/components/components.dart';
+import 'package:fa_rag_ui/config/logger_config.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/abstract_page.dart';
 import 'package:fa_rag_ui/modal/material_bottom_sheet.dart';
+import 'package:fa_rag_ui/modal/modal.dart';
 import 'package:fa_rag_ui/state/state.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class PromptsPage extends StatelessWidget {
       actions: [
         ElevatedButton(
           onPressed: () {
-            openModalBottomSheet(context, child: NewPrompt());
+            openModalBottomSheet(context, child: _NewPrompt());
           },
           child: Text('Add Prompt'),
         ),
@@ -38,11 +40,11 @@ class PromptsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final prompt = prompts[index];
                   return GestureDetector(
-                    child: PromptCard(prompt: prompt),
+                    child: _PromptCard(prompt: prompt),
                     onTap: () {
                       openTinyModalBottomSheet(
                         context,
-                        child: PromptPreview(prompt: prompt),
+                        child: _PromptPreview(prompt: prompt),
                       );
                     },
                   );
@@ -57,16 +59,16 @@ class PromptsPage extends StatelessWidget {
   }
 }
 
-class NewPrompt extends StatefulWidget {
-  const NewPrompt({super.key, this.fromPrompt});
+class _NewPrompt extends StatefulWidget {
+  const _NewPrompt({this.fromPrompt});
 
   final Prompt? fromPrompt;
 
   @override
-  State<NewPrompt> createState() => _NewPromptState();
+  State<_NewPrompt> createState() => _NewPromptState();
 }
 
-class _NewPromptState extends State<NewPrompt> {
+class _NewPromptState extends State<_NewPrompt> {
   final List<String> _promptTypes = ['User', 'System', 'Agent'];
   final List<PromptType> _promptTypesEnum = [
     PromptType.user,
@@ -145,8 +147,34 @@ class _NewPromptState extends State<NewPrompt> {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: _savePrompt,
-                child: Text('Save Prompt'),
+                onPressed: () async {
+                  final title = _textTitleController.text.trim();
+                  final existing = await _findByTitle(title);
+
+                  if (existing != null) {
+                    ModalDialog(
+                      title: 'Prompt already exists',
+                      content:
+                          'A prompt with the title "$title" already exists. Do you want to update it?',
+                      onConfirm: () {
+                        _saveOrUpdatePrompt();
+                      },
+                      customAction: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          openTinyModalBottomSheet(
+                            context,
+                            child: _PromptPreview(prompt: existing),
+                          );
+                        },
+                        child: Text('Show'),
+                      ),
+                    ).show(context);
+                  } else {
+                    _saveOrUpdatePrompt();
+                  }
+                },
+                child: const Text('Save Prompt'),
               ),
             ),
           ],
@@ -161,7 +189,15 @@ class _NewPromptState extends State<NewPrompt> {
     });
   }
 
-  void _savePrompt() {
+  Future<Prompt?> _findByTitle(String title) async {
+    final Prompt? prompt = await context.read<PromptsCubit>().getPromptByTitle(
+      title,
+    );
+    logger.i("Prompt with title '$title' exists: ${prompt != null}");
+    return prompt;
+  }
+
+  void _saveOrUpdatePrompt() {
     if (_formKey.currentState?.validate() ?? false) {
       final title = _textTitleController.text;
       final message = _textMessageController.text;
@@ -179,6 +215,7 @@ class _NewPromptState extends State<NewPrompt> {
   }
 
   String? _validate(String? value) {
+    logger.i("Validating value: $value");
     if (value == null || value.isEmpty) {
       return 'Textfield cannot be empty';
     }
@@ -186,8 +223,8 @@ class _NewPromptState extends State<NewPrompt> {
   }
 }
 
-class PromptCard extends StatelessWidget {
-  const PromptCard({super.key, required this.prompt});
+class _PromptCard extends StatelessWidget {
+  const _PromptCard({required this.prompt});
 
   final Prompt prompt;
 
@@ -225,11 +262,35 @@ class PromptCard extends StatelessWidget {
                       style: context.theme().textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      "${prompt.type.name} prompt",
-                      style: context.theme().textTheme.labelLarge?.copyWith(
-                        color: context.theme().colorScheme.secondary,
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            "${prompt.type.name} prompt",
+                            style: context
+                                .theme()
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(
+                                  color: context.theme().colorScheme.secondary,
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            '${prompt.createdAtDateFormatted}  |  ${prompt.createdAtTimeFormatted}',
+                            style: context
+                                .theme()
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(
+                                  color: context.theme().colorScheme.secondary,
+                                ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -252,7 +313,7 @@ class PromptCard extends StatelessWidget {
                     onPressed: () {
                       openModalBottomSheet(
                         context,
-                        child: NewPrompt(fromPrompt: prompt),
+                        child: _NewPrompt(fromPrompt: prompt),
                       );
                     },
                   ),
@@ -276,8 +337,8 @@ class PromptCard extends StatelessWidget {
   }
 }
 
-class PromptPreview extends StatelessWidget {
-  const PromptPreview({super.key, required this.prompt});
+class _PromptPreview extends StatelessWidget {
+  const _PromptPreview({required this.prompt});
   final Prompt prompt;
 
   @override
