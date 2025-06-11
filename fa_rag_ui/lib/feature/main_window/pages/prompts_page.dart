@@ -2,7 +2,6 @@ import 'package:fa_rag_core/core/domain/prompts/prompt.dart';
 import 'package:fa_rag_ui/components/components.dart';
 import 'package:fa_rag_ui/config/logger_config.dart';
 import 'package:fa_rag_ui/feature/main_window/pages/abstract_page.dart';
-import 'package:fa_rag_ui/modal/material_bottom_sheet.dart';
 import 'package:fa_rag_ui/modal/modal.dart';
 import 'package:fa_rag_ui/state/state.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';
