@@ -36,7 +36,9 @@ class PromptsCubit extends Cubit<PromptsState> {
     _loaderCubit.loading();
     try {
       logger.d('Loading prompts from repository');
-      final prompts = await _promptsRepository.getAll();
+      final prompts = await _promptsRepository.getAll(
+        compare: (a, b) => a.compareTo(b),
+      );
       _loaderCubit.loaded();
       emit(PromptsLoaded(prompts));
     } catch (e) {

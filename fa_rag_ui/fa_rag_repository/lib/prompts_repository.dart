@@ -24,9 +24,13 @@ class PromptsRepository extends CrudRepository<Prompt> {
   }
 
   @override
-  Future<List<Prompt>> getAll() async {
+  Future<List<Prompt>> getAll({Comparator<Prompt>? compare}) async {
     if (box.isOpen) {
-      return box.values.cast<Prompt>().toList();
+      final prompts = box.values.cast<Prompt>().toList();
+      if (compare != null) {
+        prompts.sort(compare);
+      }
+      return prompts;
     } else {
       throw Exception("Box is not open");
     }

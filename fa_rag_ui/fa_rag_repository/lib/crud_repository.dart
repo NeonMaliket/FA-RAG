@@ -1,5 +1,5 @@
 abstract class CrudRepository<T> {
-  Future<List<T>> getAll();
+  Future<List<T>> getAll({Comparator<T>? compare});
 
   Future<T?> getById(String id);
 

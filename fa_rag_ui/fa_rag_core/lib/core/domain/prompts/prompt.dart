@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 
 enum PromptType { system, user, agent }
 
-class Prompt extends Equatable {
+class Prompt extends Equatable implements Comparable<Prompt> {
   final String title;
   final String message;
   final PromptType type;
@@ -52,4 +52,15 @@ class Prompt extends Equatable {
 
   factory Prompt.fromJson(String source) =>
       Prompt.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  int compareTo(Prompt other) {
+    if (createdAt.isBefore(other.createdAt)) {
+      return 1;
+    } else if (createdAt.isAfter(other.createdAt)) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
 }
