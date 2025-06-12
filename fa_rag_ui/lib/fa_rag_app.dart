@@ -1,4 +1,5 @@
 import 'package:fa_rag_ui/domain/domain.dart';
+import 'package:fa_rag_ui/feature/loader/loader.dart';
 import 'package:fa_rag_ui/feature/main_window/main_window.dart';
 import 'package:fa_rag_ui/theme/rag_theme.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class FaRagApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           darkTheme: ragAppDarkTheme,
           themeMode: settings.currentThemeMode,
-          home: MainWindow(),
+          home: GlobalLoaderDecorator(child: MainWindow()),
         );
       },
     );

@@ -1,3 +1,4 @@
 {
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "cmake.sourceDirectory": "/Users/maliketh/IdeaProjects/FA-RAG/fa_rag_ui/linux"
 }

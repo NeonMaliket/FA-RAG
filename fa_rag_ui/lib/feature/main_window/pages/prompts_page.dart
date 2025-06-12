@@ -14,6 +14,7 @@ class PromptsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PromptsCubit>().loadPrompts();
     return AbstractPage(
       title: 'Prompts',
       actions: [
@@ -27,9 +28,7 @@ class PromptsPage extends StatelessWidget {
       child: SizedBox(
         child: BlocBuilder<PromptsCubit, PromptsState>(
           builder: (context, state) {
-            if (state is PromptsLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is PromptsLoaded) {
+            if (state is PromptsLoaded) {
               final prompts = state.prompts;
               if (prompts.isEmpty) {
                 return const Center(child: Text('No prompts available.'));
@@ -230,7 +229,7 @@ class _PromptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 175,
       child: Card(
         child: Row(
           children: [
@@ -251,7 +250,7 @@ class _PromptCard extends StatelessWidget {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -260,7 +259,6 @@ class _PromptCard extends StatelessWidget {
                       prompt.title,
                       style: context.theme().textTheme.headlineSmall,
                     ),
-                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Expanded(

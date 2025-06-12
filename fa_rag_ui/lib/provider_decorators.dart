@@ -1,6 +1,7 @@
 import 'package:fa_rag_core/core/core.dart';
 import 'package:fa_rag_repository/repository.dart';
 import 'package:fa_rag_ui/config/get_it.dart';
+import 'package:fa_rag_ui/state/cubit/loader/loader_cubit.dart';
 import 'package:fa_rag_ui/state/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,10 +43,12 @@ class BlocDecorator extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => LoaderCubit()),
         BlocProvider(
-          create: (_) =>
-              PromptsCubit(getIt.get<CrudRepository>() as PromptsRepository)
-                ..loadPrompts(),
+          create: (ctx) => PromptsCubit(
+            ctx.read<LoaderCubit>(),
+            getIt.get<CrudRepository>() as PromptsRepository,
+          )..loadPrompts(),
         ),
       ],
       child: child,

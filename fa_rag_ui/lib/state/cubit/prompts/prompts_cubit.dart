@@ -4,45 +4,67 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fa_rag_core/core/core.dart';
 import 'package:fa_rag_repository/repository.dart';
+import 'package:fa_rag_ui/config/logger_config.dart';
+import 'package:fa_rag_ui/state/cubit/loader/loader_cubit.dart';
 import 'package:meta/meta.dart';
 
 part 'prompts_state.dart';
 
 class PromptsCubit extends Cubit<PromptsState> {
-  PromptsCubit(this._promptsRepository) : super(PromptsInitial());
+  PromptsCubit(this._loaderCubit, this._promptsRepository)
+    : super(PromptsInitial());
 
+  final LoaderCubit _loaderCubit;
   final CrudRepository<Prompt> _promptsRepository;
 
-  void savePrompt(Prompt prompt) async {
-    emit(PromptsSaving(prompt));
+  void savePrompt(final Prompt prompt) async {
+    _loaderCubit.loading();
     await _promptsRepository.create(prompt);
-    emit(PromptsSaved());
+    _loaderCubit.loaded();
+    loadPrompts();
   }
 
-  void updatePrompt(String oldTitle, Prompt prompt) async {
-    emit(PromptsUpdating(prompt));
+  void updatePrompt(final String oldTitle, final Prompt prompt) async {
+    _loaderCubit.loading();
     await _promptsRepository.update(oldTitle, prompt);
-    emit(PromptsUpdated());
+    _loaderCubit.loaded();
+    loadPrompts();
   }
 
-  void loadPrompts([PromptType? type]) async {
+  void loadPrompts() async {
     emit(PromptsLoading());
-    await Future.delayed(const Duration(seconds: 1));
-    final prompts = await _promptsRepository.getAll();
-    emit(PromptsLoaded(prompts));
+    _loaderCubit.loading();
+    try {
+      logger.d('Loading prompts from repository');
+      final prompts = await _promptsRepository.getAll();
+      _loaderCubit.loaded();
+      emit(PromptsLoaded(prompts));
+    } catch (e) {
+      logger.e('Error loading prompts: $e');
+      _loaderCubit.loaded();
+      emit(PromptsLoaded([]));
+      emit(PromptsError(e.toString()));
+    }
   }
 
-  void removePrompt(String title) async {
-    emit(RemovePrompt(title));
+  void removePrompt(final String title) async {
+    _loaderCubit.loading();
     await _promptsRepository.delete(title);
-    emit(PromptRemoved(title));
+    _loaderCubit.loaded();
+    loadPrompts();
   }
 
-  Future<bool> promptExists(String title) async {
-    return await _promptsRepository.existsById(title);
+  Future<bool> promptExists(final String title) async {
+    _loaderCubit.loading();
+    final response = await _promptsRepository.existsById(title);
+    _loaderCubit.loaded();
+    return response;
   }
 
-  Future<Prompt?> getPromptByTitle(String title) async {
-    return await _promptsRepository.getById(title);
+  Future<Prompt?> getPromptByTitle(final String title) async {
+    _loaderCubit.loading();
+    final response = await _promptsRepository.getById(title);
+    _loaderCubit.loaded();
+    return response;
   }
 }
