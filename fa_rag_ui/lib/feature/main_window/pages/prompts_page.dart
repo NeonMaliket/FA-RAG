@@ -30,23 +30,45 @@ class PromptsPage extends StatelessWidget {
           builder: (context, state) {
             if (state is PromptsLoaded) {
               final prompts = state.prompts;
-              if (prompts.isEmpty) {
-                return const Center(child: Text('No prompts available.'));
-              }
-              return ListView.builder(
-                itemCount: prompts.length,
-                itemBuilder: (context, index) {
-                  final prompt = prompts[index];
-                  return GestureDetector(
-                    child: _PromptCard(prompt: prompt),
-                    onTap: () {
-                      openTinyModalBottomSheet(
-                        context,
-                        child: _PromptPreview(prompt: prompt),
-                      );
-                    },
-                  );
-                },
+              return CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    backgroundColor: Colors.transparent,
+                    title: TextField(
+                      decoration: InputDecoration(labelText: 'Search Prompts'),
+                      onChanged: (value) {
+                        context.read<PromptsCubit>().loadPrompts(
+                          containsTitle: value,
+                        );
+                      },
+                    ),
+                    automaticallyImplyLeading: false,
+                  ),
+                  if (prompts.isEmpty)
+                    SliverToBoxAdapter(
+                      child: Center(
+                        child: Text(
+                          'No prompts found. Click "Add Prompt" to create one.',
+                          style: context.theme().textTheme.bodyLarge,
+                        ),
+                      ),
+                    ),
+                  if (prompts.isNotEmpty)
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final prompt = prompts[index];
+                        return GestureDetector(
+                          child: _PromptCard(prompt: prompt),
+                          onTap: () {
+                            openTinyModalBottomSheet(
+                              context,
+                              child: _PromptPreview(prompt: prompt),
+                            );
+                          },
+                        );
+                      }, childCount: prompts.length),
+                    ),
+                ],
               );
             }
             return SizedBox.shrink();

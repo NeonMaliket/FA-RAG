@@ -31,7 +31,7 @@ class PromptsCubit extends Cubit<PromptsState> {
     loadPrompts();
   }
 
-  void loadPrompts() async {
+  void loadPrompts({String? containsTitle}) async {
     emit(PromptsLoading());
     _loaderCubit.loading();
     try {
@@ -40,7 +40,18 @@ class PromptsCubit extends Cubit<PromptsState> {
         compare: (a, b) => a.compareTo(b),
       );
       _loaderCubit.loaded();
-      emit(PromptsLoaded(prompts));
+      emit(
+        PromptsLoaded(
+          prompts.where((prompt) {
+            if (containsTitle == null || containsTitle.isEmpty) {
+              return true;
+            }
+            return prompt.title.toLowerCase().contains(
+              containsTitle.toLowerCase(),
+            );
+          }).toList(),
+        ),
+      );
     } catch (e) {
       logger.e('Error loading prompts: $e');
       _loaderCubit.loaded();
